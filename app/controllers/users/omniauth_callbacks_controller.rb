@@ -1,15 +1,15 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def ldap
      # We only find ourselves here if the authentication to LDAP was successful.
-        ldap_return = request.env["omniauth.auth"]["extra"]["raw_info"]
-        firstname = ldap_return.givenname[0].to_s
-        lastname = ldap_return.sn[0].to_s
-        displayname = ldap_return.displayname[0].to_s
-        # TODO sAMAccountName is Windows specific, if we want to support generic
-        # LDAP + AD we need to decide dynamically which field to used based on config
-        username = ldap_return.uid[0].to_s
-        # email = ldap_return.proxyaddresses[0][5..-1].to_s
-        email = "#{username}@mock.address"
+        ldap_return = request.env["omniauth.auth"]["info"]
+        puts request.env["omniauth.auth"].to_yaml
+        firstname = ldap_return.first_name.to_s
+        lastname = ldap_return.last_name.to_s
+        displayname = ldap_return.name.to_s
+        # TODO Not sure if it should be nickname (like 'john') or full qualified uid
+        username = ldap_return.nickname.to_s
+        email = ldap_return.email.to_s
+        # email = "#{username}@mock.address"
 
         @user = User.find_or_create_by_ldap(
           username,
