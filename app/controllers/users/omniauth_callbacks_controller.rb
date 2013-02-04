@@ -20,4 +20,11 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         )
         sign_in_and_redirect @user
   end
+
+  def failure
+    # TODO I hate instanceof testing, but i see no other way
+    is_ldap = request.env['omniauth.error.strategy'].kind_of? OmniAuth::Strategies::LDAP
+    redirect_to ldap_form_user_path, :alert => request.env['omniauth.error.type'] if is_ldap
+    # TODO Handle other ways of authentication
+  end
 end

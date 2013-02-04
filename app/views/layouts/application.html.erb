@@ -12,7 +12,7 @@
 <% if user_signed_in? %>
     Welcome <%= link_to current_user.email, user_path %> (<%= link_to "logout", destroy_user_session_path,  :method => :delete %>)
 <% else %>
-    Nobody logged in.  <%= link_to "log in here", user_omniauth_authorize_path(:ldap) %>
+    Nobody logged in.  <%= link_to "log in here", ldap_form_user_path %>
 <% end %>
 
 <%= yield %>
