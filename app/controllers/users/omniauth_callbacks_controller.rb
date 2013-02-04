@@ -11,16 +11,13 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         # email = ldap_return.proxyaddresses[0][5..-1].to_s
         email = "#{username}@mock.address"
 
-        if @user = User.where(username: username).first
-            sign_in_and_redirect @user
-        else
-            @user = User.create!(:firstname => firstname,
-                                :lastname => lastname,
-                                :displayname => displayname,
-                                :username => username,
-                                :email => email,
-                                :password => User.generate_random_password)
-            sign_in_and_redirect @user
-        end
+        @user = User.find_or_create_by_ldap(
+          username,
+          firstname: firstname,
+          displayname: displayname,
+          lastname: lastname,
+          email: email
+        )
+        sign_in_and_redirect @user
   end
 end
