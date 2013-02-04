@@ -9,6 +9,11 @@
 <body>
        <p class="notice"><%= notice %></p>
        <p class="alert"><%= alert %></p>
+<% if user_signed_in? %>
+    Welcome <%= current_user.email %> (<%= link_to "logout", destroy_user_session_path,  :method => :delete %>)
+<% else %>
+    Nobody logged in.  <%= link_to "log in here", user_omniauth_authorize_path(:ldap) %>
+<% end %>
 
 <%= yield %>
 
