@@ -9,15 +9,16 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         # LDAP + AD we need to decide dynamically which field to used based on config
         username = ldap_return.uid[0].to_s
         # email = ldap_return.proxyaddresses[0][5..-1].to_s
+        email = "#{username}@mock.address"
 
         if @user = User.where(username: username).first
             sign_in_and_redirect @user
         else
-            @user = User.create(:firstname => firstname,
+            @user = User.create!(:firstname => firstname,
                                 :lastname => lastname,
                                 :displayname => displayname,
                                 :username => username,
-                                # :email => email,
+                                :email => email,
                                 :password => User.generate_random_password)
             sign_in_and_redirect @user
         end

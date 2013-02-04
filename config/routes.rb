@@ -3,6 +3,7 @@ LdapTest::Application.routes.draw do
 
   root :to => 'posts#index'
   resources :posts
+  resource :user, :only => :show
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
